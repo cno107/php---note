@@ -196,11 +196,206 @@ echo $dd.'---'.$count;
 
 # Array
 
++ 定义
+
+  - ```$arr1 = array(1,2,3);```
+
+  - ```$arr2 = [4,5,6];```
+
+  - $arr[]  = 1;       开起默认配列
+
+    ```php
+     $arr[] = 'a';
+        $arr[10] = 17;
+        $arr[] = 'b';    //会从11开始  且会被 后面的[11] 覆盖
+        $arr['key'] = 'value';  //不会被 [12] 覆盖
+        $arr[11] = 'c';
+        $arr[12] = 'd';
+      $arr[3] = '333';  //并不会被放到前面
+        var_dump($arr); 
+    //array(5) { [0]=> string(1) "a" [10]=> int(17) [11]=> string(1) "c" ["key"]=> string(5) "value" [12]=> string(1) "d" [3]=> string(3) "333"}
+    
+    ```
+
++ 数组特殊下标 的转换
+
+  ```php
+  $arr[False] = false;
+      $arr[True] = true;
+      $arr[Null] = Null;
+     
+      var_dump($arr); //array(3) { [0]=> bool(false) [1]=> bool(true) [""]=> NULL }
+  ```
+
++ php数组中 没有类型限制，没长度限制
+  存放在heap
+
+ ## 多维数组
+
+不建议三维以上 增加访问难度 降低访问效率
+
++ 二维数组：
+
+  ```php
+   $info = array(
+          array('name' => 'jim','age' => 30),
+          array('name' => 'jim','age' => 30),
+          array('name' => 'jim','age' => 30)
+      );
+  
+      print_r($info);
+  ```
+
++ 异形数组（不规则数组）： 有普通变量也有嵌套
+  不建议使用 
+
+## 遍历Traversal--foreach
+
++ 基本查找
+
+  ```php
+  $ii = array(
+          0 => array('name' => 'jim','age' => 30) ,
+          1 => array('name' => 'bob','age' => 25) ,
+          2 => array('name' => 'php','age' => 20) ,
+  
+      );
+  print_r($ii[2]['name']);    
+  ```
+
++ foreach遍历语法
+
+  ```php
+  // lv1  只有数值
+  $arr = [1,2,3,4,5,6,7];
+  foreach ($arr as $value ){
+        echo $value;
+     };
+  
+  // lv2  输出key(index)和value
+  foreach ($arr as $key => $value ){      ////////////////
+        echo $key.':'.$value."\n";
+     };
+  ```
+
+  二维数组的话 通常不会两个维度下标都为数字 一般是一维为数字(默认)， 二维为字符串(db表字段)
+
+  所以遍历的时候一般只针对一维遍历，然后取到二维数组元素 再通过下标去访问
+
+  ```php
+  foreach ($ii as $key => $value ){
+         //1.可以继续foreach来遍历 $value
+         //2. 通过下标访问
+        echo 'name:'.$value['name']."\n";
+     };
+  ```
+
++ foreach遍历原理 ：利用指针获取数据 同时移动指针
+
+  1. foreach会重置指针：指向第一个
+
+  2. 进入foreach循环： 通过指针获取当前第一个元素，                                                                                       然后将下标取出放到对应的下标变量\$key中去(if exist)，将值取出放到对应的值变量$value中去
+
+  3. 进入到循环内部，开始执行
+
+  4. 重复2&3 直到2的时候遇到指针取不到内容(指针指向数组最后)
+###for
+
+```php
+for($i = 0; $i < count($arr); $i++){
+         //问题 相当于每次比较时都调用了 count函数 效率低
+         //所以应该 在前先定义一下长度 for($i = 0,$ll = count($arr); $i< $ll ;$i++)
+      echo 'index is '.$i.' and value is '.$arr[$i]."\n";
+  }
+```
+
+###while each list  
+
++ While 没啥说的就是while 可以配合each和list
+
++ each：能够从一个数组中获取当前数组指针所指向的元素的下标和值   
+              拿到之后数组指针下移 **同时拿到一个有四个元素的的数组返回**
+
+  ```php
+   0   => 下标      //
+   1   =>  值
+  key  => 下标
+  value => 值
+       
+  print_r(each($arr));
+  print_r(each($arr));  // 指针不会重置
+  print_r(each($arr));     
+  
+  
+  function fun_adm_each(&$array){
+     $res = array();
+     $key = key($array);
+     if($key !== null){
+         next($array); 
+         $res[1] = $res['value'] = $array[$key];
+         $res[0] = $res['key'] = $key;
+     }else{
+         $res = false;
+     }
+     return $res;
+  }
+  ```
+
++ list结构
+
+  ```php
+   $arr = array(1, 2=>'cno107');  //这有一个坑 k:0,v:1 ; k:1,v:NULL ; k:2;v:'cno107'
+  
+  list($first,$second,$third) = $arr;
+  
+   var_dump($first,$second,$third,$fourth);
+  //int(1)         
+  //NULL
+  //string(6) "cno107"
+  //NULL
+  ```
+
++ While + each + list
+
+  ```php
+  $arr = [1,2,'name' => 'TOM',3,'age' => 30,4];
+  
+  while( list($k,$v) = each($arr) ){
+           
+     echo 'key is '.$k.' value is '.$v."\n";
+  }
+  ```
+
+## 排序Sort
+
+按照ASCII码进行比较，对原数组进行排序 引用传递
+
++ sort( )  顺 （下标重排）
++ rsort( ) 逆
++ asort( ) 顺  （下标保留）
++ arsort( ) 
++ ksort( )  按key名排序
++ krsort( ) 
++ shuffle( ) 打乱
+
+## 指针pointer
+
++ reset( )  重置指针 到首位
++ end( )   重置到末尾
++ next( )   
++ prev( )
++ current( )   当前指针的value
++ key( )      当前指针的key
++ 注意next prev会离开数组 且回不来
+  比如 最后一个 时next之后再prev 回不来滴 必须reset/end
+
+## 相关函数
 
 
- 
 
+​     
 
+​     
 
 
 
