@@ -742,7 +742,7 @@ max();
 rand();  //得到指定区间的随机整数
 mt_rand() //同上 底层不同 建议使用        $int = mt_rand(4,10);
 round();
-cell();
+ceil();
 floor();
 pow();  // pow(2,10) == 2^10 == 1024
 abs(); //absolute

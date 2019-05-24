@@ -391,11 +391,121 @@ for($i = 0; $i < count($arr); $i++){
 
 ## 相关函数
 
++ count ( )
++ array_push ( )
++ array_pop( )
++ array_reversel
++ array_shift( )   array_unshift( ) 
++ in_array( )
++ array_keys( )
++ array_values( )
+
+#再帰ーRecursive
+
+```php
+function fei($tar){
+    $arr[0] = 1;
+    $arr[1] = 1;
+    if($tar === 1 || $tar === 0){
+        return 1;
+    }
+    return fei($tar-1) + fei($tar-2);
+}
+
+print_r(fei(15));   //num　　其实是第16位    
+```
+
+     ```php
+//  递推  
+function fei($tar){
+        $arr[0] = 1;
+        $arr[1] = 1;
+        for($i = 2 ; $i < $tar ; $i++){
+            $arr[$i] = $arr[$i-1] + $arr[$i-2];
+        }
+        return $arr;
+    }
+
+    print_r(fei(16));   //arrary   
+     ```
+
+# アルゴリズムとsort
+
+## Bubble Sort
+
+```php
+//相邻俩比较
+function bubbleSort($arr){
+   $len = count($arr);
+  for($j=0;$j<$len;$j++){
+     for($i=0;$i<$len-$j;$i++){
+         if($arr[$i] < $arr[$i+1]){
+            //换位 可用位运算
+         }
+     }
+  }
+  return $arr;
+}
+$a = [7,5,6,9,3,1,2,1,1];
+print_r(bubbleSort($a));   //arrary
+```
+
+## Selection Sort
+
+```php
+//第一个和剩下的比 第二个在和右边剩下的比
+function SelctionSort($arr){
+   $len = count($arr);
+ for($i=0;$i<$len-1;$i++){
+     $min = $i;
+   for($j=$i;$j<$len;$j++){
+      if($arr[$min] > $arr[$j]){
+          $min = $j;
+       }
+   }
+
+   if($min !== $i){
+        //$arr[$min] and $arr[$i]交换
+     }
+
+ }
+  return $arr;
+}
+$a = [3,2,1,4,6,5,9,7,8];
+print_r(SelctionSort($a));   //arrary
+```
+
+## Insert Sort
+
++ 思路：  两部分 比较大小 后移 插入
+  - 从数组中先取出第二个数 (记录k  &  v)
+  - 让它和第一个数比较 如果它小
+  - 变成它左边的值   且序号k-1   (这两步就是数字后移一位)
+  - 这时候两个数会变成一样
+  - 给序号在k-1的重新赋值  ， 值为当初取出来的v （在k-1处插入）
+
+```php
+function InsertSort($arr){
+   $len = count($arr);
+  for($i=1;$i<$len;$i++){
+      $value = $arr[$i];  //current index's value  （拿出一个数）
+      $key = $i;     //current index(key)
+   while($key > 0 && $value > $arr[$key-1]){ //当前序号大于0 且左边比他大时
+        $arr[$key] = $arr[$key-1];   //变成它左边的值
+        $key--;                      //序号-1
+                                      //这两步就是数字后移一位
+   }                               
+    $arr[$key] = $value;         //在key这个需要填值，值为当初拿出的数
+  }
+  return $arr;
+}
+$a = [3,2,1,4,6,5,9,7,8];
+print_r(InsertSort($a));   //arrary
+```
 
 
-​     
 
-​     
+ 
 
 
 
