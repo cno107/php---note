@@ -399,6 +399,7 @@ for($i = 0; $i < count($arr); $i++){
 + in_array( )
 + array_keys( )
 + array_values( )
++ array_slice (arr , start , end ).      切分数组(include start ,but no end)
 
 #再帰ーRecursive
 
@@ -503,9 +504,70 @@ $a = [3,2,1,4,6,5,9,7,8];
 print_r(InsertSort($a));   //arrary
 ```
 
+## Merge Sort
 
++ 二路归并  **（得是两个有序数列）**
 
- 
+```php
+$arr1 =[1,3,5];
+$arr2 =[2,4,6];
+
+$arr3 = [];  //开启一个默认数组  把1,2合并过来
+
+while(count($arr1) && count($arr2)){      
+    $arr3[] = $arr1[0] < $arr2[0] ? array_shift($arr1) : array_shift($arr2);
+    //进行比较把小的那个 从数组中取出 加到3里。 直到一个数组为空(另一个数组至少还剩一个)
+}
+$arr3 = array_merge($arr3,$arr2,$arr1);  //2,1有一个为空 但不能确定
+ //因为1,2是有序数组 所以不管哪个剩2+的数据时 都已经是最大的了 所以直接拼在新数组后面就可以了
+print_r($arr3);
+```
+
++ merge sort
+
+  1. 将arr拆成两个数组
+
+  2. 重复1直到最小单元
+
+  3. 申请空间 使其大小为两个已经排序数列之和 (该空间用来存放合并后的数组)
+
+  4. 设两个指针，分别指向两个已经排序数列的起始位置
+
+  5. 比较指针所指向的元素，选小的放到合并空间 并将指针移动到下一位
+
+  6. 重复 直到某一指针超出序列尾
+
+  7. 将另一个序列剩下的所有元素直接复制到合并序列尾
+```php
+function mergeSort($arr){
+    //exit
+    $len = count($arr);
+    if($len <=1) return $arr;
+
+    //slice arr
+    $middle = ceil($len/2);  //index
+    $left = array_slice($arr,0,$middle);   //  array 不包括结尾
+    $right = array_slice($arr,$middle);
+
+    //再帰点 $left和$right都没有排好序 而且可能是有多个元素的数组
+     $left = mergeSort($left);
+
+     $right = mergeSort($right);
+
+    //二路归并
+    $merge = [];
+    while(count($left) && count($right)){
+        $merge[] = $left[0] < $right[0] ? array_shift($left) : array_shift($right);
+
+    }
+    $merge = array_merge($merge,$left,$right);
+    return $merge;
+}
+
+print_r($merge);
+
+```
+
 
 
 
