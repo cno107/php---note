@@ -568,6 +568,43 @@ print_r($merge);
 
 ```
 
+```js
+// JS
+
+
+let arr =[4,7,1,8,9,6,2,5,3];
+
+function mergeSort(arr) {
+    let length = arr.length;          //总长
+    if(length <=1 ) return arr;       // 切到长度为1时 出来
+    let middle = Math.floor((length/2));  // 狐狸精中间警告
+
+    let left = arr.slice(0,middle) ;  //小左
+    let right = arr.slice(middle) ;   //小右
+
+    left = mergeSort(left);     //递归 排序小左
+    right = mergeSort(right);
+
+
+    let mergeArr = [] ;   //新家(容器)
+    let i=0;              // index
+    while( left.length !== 0 && right.length !== 0 ){  //左右有一个为0就出来
+
+      mergeArr[i] = left[0] < right[0] ? left.shift() : right.shift();
+      //核心 比较第一个 小的那个 从原来数组中取出来 (此时被取出的素组的index=0那个为之前index=1的那个元素)
+        
+       i++;  // 
+    }
+
+    mergeArr = mergeArr.concat(right,left);  //concat来合并
+
+    return mergeArr;
+
+}
+
+console.log(mergeSort(arr));
+```
+
 
 
 
